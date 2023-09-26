@@ -1,0 +1,5 @@
+.navbar{
+    display: grid;
+    grid-template-columns: 10% 20% 60% 10%;
+    align-items: center;
+}
