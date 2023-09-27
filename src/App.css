@@ -1,8 +1,18 @@
-* {
-  margin: 0;
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+.error{
+  background-image: url("../public/error.svg");
 }
 
-.search input {
+* {
+  margin: 0;
+  font-family: 'Outfit', 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.search input,
+select {
   border: none;
   height: 2.5rem;
   background: rgba(255, 255, 255, 0.12);
@@ -12,6 +22,22 @@
   -webkit-backdrop-filter: blur(8.3px);
   width: 20rem;
   color: black;
+}
+
+option {
+  border: none;
+  height: 2.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8.3px);
+  -webkit-backdrop-filter: blur(8.3px);
+  width: 5rem;
+  color: black;
+}
+
+select {
+  width: 6rem;
 }
 
 .app {
@@ -39,6 +65,38 @@
   text-align: center;
 }
 
+/* Weather info */
+
+.weather-info {
+  width: 70%;
+  margin: 5rem auto;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(7.6px);
+  -webkit-backdrop-filter: blur(7.6px);
+}
+
+.major-details {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.location-name {
+  font-size: 3rem;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.weather-image {
+  margin-right: 0;
+}
+
+
 @media only screen and (max-width: 600px) {
   .app {
     display: flex;
@@ -50,31 +108,29 @@
     margin: 0;
     padding: 1rem 0;
     display: grid;
-    grid-template-columns: 80% 20%;
+    grid-template-columns: 70% 15% 15%;
+  }
+  .search{
+    display: flex;
+  }
+  .search input, select {
+    width: 80%;
+  }
+  .mode IconButton{
+    width: 0.5rem;
+    height: 0.5rem;
+  }
+  .weather-info {
+    /* padding: 1rem 15rem; */
+    width: 70%;
+    margin: 5rem auto;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
   }
 
-  .search input {
-    width: 90%;
+  .location-name {
+    font-size: 2rem;
+    justify-content: center;
   }
-}
-
-
-/* Weather info */
-
-.weather-info {
-  /* padding: 1rem 15rem; */
-  width: 70%;
-  margin: 5rem auto;
-  display: grid;
-  justify-content: center;
-  grid-template-columns: 50% 50%;
-}
-
-.location-name{
-  font-size: 3rem;
-  margin-top: auto;
-  margin-bottom: auto;
-}
-.weather-image{
-  margin-right: 0;
 }
