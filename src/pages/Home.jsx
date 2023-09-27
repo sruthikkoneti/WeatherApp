@@ -2,22 +2,48 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Sunny from "../components/Sunny";
 import Rainy from "../components/Rainy";
+import Loader from "../components/Loader";
+import IconButton from "@mui/material/IconButton";
+
+const darkTheme = {
+  backgroundColor: "#2B2B2B",
+  color: "white",
+};
+const lightTheme = {
+  backgroundColor: "#d8dcff",
+  color: "black",
+};
 
 const Home = () => {
   const [weatherData, SetWeatherData] = useState({});
   const [location, setLocation] = useState("");
+  const [mode, setMode] = useState("light");
+  const [loading, setLoading] = useState(false);
+
+  const themeToggle = () => {
+    if (mode === "light") {
+      setMode("dark");
+    } else {
+      setMode("light");
+    }
+  };
 
   const handleLocation = (event) => {
     console.log(event.target.value);
     setLocation(event.target.value);
   };
 
+  const [condition, setCondition] = useState("");
+
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=b1f51569f3a7bd49f7e8052e31eee12b`;
 
   const getWeather = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(url);
       SetWeatherData(response.data);
+      setCondition(response.data.weather[0].main);
+      setLoading(false);
       console.log(response.data);
       setLocation("");
     } catch (err) {
@@ -30,8 +56,11 @@ const Home = () => {
   // },[])
 
   return (
-    <div className="app">
-      <div className="top-container">
+    <div className="app" style={mode === "light" ? lightTheme : darkTheme}>
+      <div
+        className="top-container"
+        style={mode === "light" ? lightTheme : darkTheme}
+      >
         <div className="search">
           <input
             value={location}
@@ -44,50 +73,45 @@ const Home = () => {
           <button onClick={getWeather}>Search</button>
         </div>
         <div className="mode">
-          <button>Mode</button>
+          <IconButton onClick={themeToggle}>
+            {mode === "light" ? (
+              <img src="/public/moon.png" />
+            ) : (
+              <img src="/public/sun.png" />
+            )}
+          </IconButton>
         </div>
       </div>
-      <div className="container">
-        <div className="top">
-          <div className="location">
-            <p>{weatherData.name}</p>
-          </div>
-          <div className="temp">
-            {weatherData.main ? (
-              <h1>{weatherData.main.temp.toFixed()}°F</h1>
-            ) : null}
-          </div>
-          <div className="description">
-            {weatherData.weather ? <p>{weatherData.weather[0].main}</p> : null}
-          </div>
-        </div>
-        {/* {weatherData.name===undefined && (
-          <h3>search for any location</h3>
-        )}  */}   {/* Test case to display something when data is not there*/}
-
-        {weatherData.name !== undefined && (
-          <div className="bottom">
-            <div className="feels">
-              {weatherData.main ? (
-                <p className="bold">
-                  {weatherData.main.feels_like.toFixed()}°F
-                </p>
-              ) : null}
-              <p>Feels Like</p>
-            </div>
-            <div className="humidity">
-              {weatherData.main ? (
-                <p className="bold">{weatherData.main.humidity}%</p>
-              ) : null}
-              <p>Humidity</p>
-            </div>
-            <div className="wind">
-              {weatherData.wind ? (
-                <p className="bold">{weatherData.wind.speed.toFixed()} MPH</p>
-              ) : null}
-              <p>Wind Speed</p>
-            </div>
-          </div>
+      <div
+        className="bottom-container"
+        style={mode === "light" ? lightTheme : darkTheme}
+      >
+        {loading===true ? (
+          <Loader />
+        ) : (
+          <>
+            {weatherData.weather && (
+              <>
+                <div className="weather-info">
+                  <div className="location-name">
+                    <h1>{weatherData.name}</h1>
+                  </div>
+                  <div className="weather-image">
+                    {weatherData.weather[0].main === "Clear" ? (
+                      <Sunny />
+                    ) : (
+                      <Rainy />
+                    )}
+                  </div>
+                  <div className="temperature">
+                    {weatherData.main ? (
+                      <h1>{weatherData.main.temp.toFixed()}°F</h1>
+                    ) : null}
+                  </div>
+                </div>
+              </>
+            )}
+          </>
         )}
       </div>
     </div>
