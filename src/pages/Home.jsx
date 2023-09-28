@@ -5,8 +5,8 @@ import Rainy from "../components/Rainy";
 import Loader from "../components/Loader";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
-import NoLocation from "./NoLocation";
-
+import Welcome from "./Welcome";
+import { Navigate, redirect, useNavigate } from "react-router";
 
 const darkTheme = {
   backgroundColor: "#2B2B2B",
@@ -18,8 +18,9 @@ const lightTheme = {
 };
 
 const Home = () => {
+  const navigate = useNavigate();
   const [weatherData, SetWeatherData] = useState({});
-  const [location, setLocation] = useState("new delhi");
+  const [location, setLocation] = useState("");
   const [unit, setUnit] = useState("imperial");
   const options = ["imperial", "metric"];
   const handleUnits = (event) => {
@@ -30,8 +31,7 @@ const Home = () => {
   };
   const [mode, setMode] = useState("light");
   const [loading, setLoading] = useState(false);
-
-  const [noLocation, setNoLocation] = useState(false);
+  const [welcome,setWelcome]=useState(false)
 
   const themeToggle = () => {
     if (mode === "light") {
@@ -61,17 +61,23 @@ const Home = () => {
       SetWeatherData(response.data);
       console.log(response.data);
       setLoading(false);
-      // setLocation("");
+      setWelcome(false)
     } catch (err) {
-      console.log(err);
-      setNoLocation(true);
+      console.log(err.response.data);
       setLoading(false);
+      if(err.response.data.message==="city not found"){
+        navigate("/error")
+      }
+      if(err.response.data.message==="Nothing to geocode"){
+        setWelcome(true)
+      }
     }
+
   };
 
   useEffect(() => {
-    console.log(weatherData);
     getWeather();
+    console.log(weatherData);
   }, [unit]);
 
   return (
@@ -121,7 +127,7 @@ const Home = () => {
           <Loader />
         ) : (
           <>
-            {weatherData.weather && (
+            {weatherData.cod ? (
               <>
                 <div className="weather-info">
                   <div className="major-details">
@@ -147,10 +153,13 @@ const Home = () => {
                   <div className="wind-speed">{weatherData.wind.speed} MPH</div>
                 </div>
               </>
-            )}
+            ) : null}
           </>
         )}
-        {location === "" && <NoLocation />}
+        {/* {weatherData === "" && <Welcome />} */}
+        {/* {status === 404 && <Navigate to="/error" />} */}
+        { welcome===true && <Welcome />}
+
       </div>
     </div>
   );
