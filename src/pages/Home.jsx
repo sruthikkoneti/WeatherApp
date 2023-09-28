@@ -87,7 +87,7 @@ const Home = (props) => {
   return (
     <div
       className="app"
-      style={props.mode === "light" ? lightTheme : darkTheme}
+      style={props.mode === "light" ? props.lightTheme : props.darkTheme}
     >
       <div
         className="top-container"
@@ -149,7 +149,7 @@ const Home = (props) => {
       </div>
       <div
         className="bottom-container"
-        style={props.mode === "light" ? lightTheme : darkTheme}
+        style={props.mode === "light" ? props.lightTheme : props.darkTheme}
       >
         {loading === true ? (
           <Loader />
