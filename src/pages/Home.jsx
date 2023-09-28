@@ -4,10 +4,11 @@ import Sunny from "../components/Sunny";
 import Rainy from "../components/Rainy";
 import Loader from "../components/Loader";
 import IconButton from "@mui/material/IconButton";
-import SearchIcon from "@mui/icons-material/Search";
-import Welcome from "./Welcome";
-import { Navigate, redirect, useNavigate } from "react-router";
 
+import Welcome from "./Welcome";
+import { useNavigate } from "react-router";
+import { Icon } from '@iconify/react';
+import NoLocation from "./NoLocation";
 const darkTheme = {
   backgroundColor: "#2B2B2B",
   color: "white",
@@ -31,7 +32,8 @@ const Home = () => {
   };
   const [mode, setMode] = useState("light");
   const [loading, setLoading] = useState(false);
-  const [welcome,setWelcome]=useState(false)
+  const [welcome, setWelcome] = useState(false);
+  const [noLocation,setNoLocation]=useState(false);
 
   const themeToggle = () => {
     if (mode === "light") {
@@ -61,18 +63,20 @@ const Home = () => {
       SetWeatherData(response.data);
       console.log(response.data);
       setLoading(false);
-      setWelcome(false)
+      setWelcome(false);
+      setNoLocation(false)
     } catch (err) {
       console.log(err.response.data);
       setLoading(false);
-      if(err.response.data.message==="city not found"){
-        navigate("/error")
+      if (err.response.data.message === "city not found") {
+        // navigate("/error");
+        setNoLocation(true)
+        setWelcome(false)
       }
-      if(err.response.data.message==="Nothing to geocode"){
-        setWelcome(true)
+      if (err.response.data.message === "Nothing to geocode") {
+        setWelcome(true);
       }
     }
-
   };
 
   useEffect(() => {
@@ -86,15 +90,16 @@ const Home = () => {
         className="top-container"
         style={mode === "light" ? lightTheme : darkTheme}
       >
-        <div className="search">
+        <div className="search" style={mode === "light" ? lightTheme : darkTheme}>
           <input
             value={location}
             onChange={handleLocation}
             placeholder="Enter Location"
             type="text"
             onKeyDown={handleKeyDown}
+            style={mode === "light" ? lightTheme : darkTheme}
           />
-          <select onChange={handleUnits}>
+          <select onChange={handleUnits} style={mode === "light" ? lightTheme : darkTheme}>
             {options.map((option, index) => {
               return (
                 <option key={index} value={option}>
@@ -106,17 +111,18 @@ const Home = () => {
         </div>
         <div className="search-button">
           <IconButton onClick={getWeather}>
-            <SearchIcon />
+            {mode==="light"? <Icon icon="material-symbols:search" color="black" /> : <Icon icon="material-symbols:search" color="white" />}
           </IconButton>
         </div>
         <div className="mode">
           <IconButton onClick={themeToggle}>
             {mode === "light" ? (
-              <img src="/moon.png" />
+              <Icon icon="fluent-emoji:new-moon" color="gray" width="48" height="48" />
             ) : (
-              <img src="/sun.png" />
+              <Icon icon="fluent-emoji:sun-behind-small-cloud" color="gray" width="48" height="48" />
             )}
           </IconButton>
+
         </div>
       </div>
       <div
@@ -133,6 +139,7 @@ const Home = () => {
                   <div className="major-details">
                     <div className="location-name">
                       <h1>{weatherData.name}</h1>
+                      <h4>{weatherData.sys.country}</h4>
                     </div>
                     <div className="weather-image">
                       {weatherData.weather[0].main === "Clear" ? (
@@ -150,7 +157,11 @@ const Home = () => {
                       </h1>
                     ) : null}
                   </div>
-                  <div className="wind-speed">{weatherData.wind.speed} MPH</div>
+                  <div className="wind-speed">Wind Speed: {weatherData.wind.speed} MPH</div>
+                  <div className="coordinates">
+                    <p>{Math.abs(Number(weatherData.coord.lon))} {weatherData.coord.lon<0 ? "°West" : "°East"}</p>
+                    <p>{Math.abs(Number(weatherData.coord.lat))} {weatherData.coord.lat<0 ? "°South" : "°North"}</p>
+                  </div>
                 </div>
               </>
             ) : null}
@@ -158,8 +169,8 @@ const Home = () => {
         )}
         {/* {weatherData === "" && <Welcome />} */}
         {/* {status === 404 && <Navigate to="/error" />} */}
-        { welcome===true && <Welcome />}
-
+        {welcome === true && <Welcome />}
+        {noLocation === true && <NoLocation/>}
       </div>
     </div>
   );
