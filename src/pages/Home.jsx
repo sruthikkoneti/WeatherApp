@@ -54,16 +54,17 @@ const Home = () => {
     }
   };
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=${unit}&appid=b1f51569f3a7bd49f7e8052e31eee12b`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=${unit}&appid=b1f51569f3a7bd49f7e8052e31eee12b
+  `;
 
   const getWeather = async () => {
     try {
+      setWelcome(false);
       setLoading(true);
       const response = await axios.get(url);
       SetWeatherData(response.data);
       console.log(response.data);
       setLoading(false);
-      setWelcome(false);
       setNoLocation(false)
     } catch (err) {
       console.log(err.response.data);

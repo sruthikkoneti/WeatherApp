@@ -3,7 +3,7 @@ import "./Loader.css";
 
 const Loader = () => {
   return (
-    <div className="center" style={{marginLeft:"auto", marginRight:"auto", justifyContent:"center"}}>
+    <div className="center" >
       <div className="loader">
         <div id="first">
           <div id="second">
