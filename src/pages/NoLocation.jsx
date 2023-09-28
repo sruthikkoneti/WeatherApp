@@ -1,13 +1,17 @@
-import React from 'react'
+import React from "react";
 
-const NoLocation = () => {
+const NoLocation = (props) => {
   return (
-    <div className="error" style={{background:"no-repeat", textAlign:"center", height:"80vh"}} >
-      
-     <h1>Weather reports not found for this city, Please try something else...</h1>
-    <img src="/error.svg" alt="" width="100%" height="90%" />
-  </div>
-  )
-}
+    <div
+      className="no-location"
+      style={props.mode === "light" ? props.lightTheme : props.darkTheme}
+    >
+      <h1>
+        Weather reports not found for this city, Please try something else...
+      </h1>
+      <img src="/error.svg" alt="" width="50%" />
+    </div>
+  );
+};
 
-export default NoLocation
+export default NoLocation;

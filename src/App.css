@@ -2,8 +2,17 @@
 
 .error {
   background-image: url("../public/error.svg");
+  background: no-repeat;
+  text-align: center;
+  position: relative;
+  bottom: 0;
+  padding-bottom: 0;
 }
-
+.no-location {
+  background: no-repeat;
+  text-align: center;
+  position: relative;
+}
 * {
   margin: 0;
   font-family: 'Outfit', 'Segoe UI', 'Roboto', 'Oxygen',
@@ -45,9 +54,8 @@ select {
   display: grid;
   grid-template-rows: 10% 90%;
   margin: 0;
+  overflow-y: scroll;
 }
-
-
 .top-container {
   align-items: center;
   padding: 0 10rem;
@@ -124,6 +132,7 @@ select {
     display: flex;
     flex-direction: column;
     margin: 0;
+    padding-bottom: 0;
   }
 
   .app .top-container {
@@ -133,6 +142,12 @@ select {
     grid-template-columns: 70% 15% 15%;
     display: flex;
     justify-content: center;
+  }
+  .bottom-container{
+    display: flex;
+    flex-direction: column;
+    /* margin-bottom: 0; */
+
   }
   .search-button{
     display: block;
@@ -174,5 +189,8 @@ select {
   }
   .icons{
     padding: 0;
+  }
+  .no-location h1{
+    font-weight: 300;
   }
 }
